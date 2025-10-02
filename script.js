@@ -4,15 +4,15 @@ const taskInput = document.getElementById("task-input");
 const taskList = document.getElementById("task-list");
 
 function addTask(){
-    taskTest = taskInput.value.trim();
+    taskText = taskInput.value.trim();
     
-    if (taskTest === "") {
+    if (taskText === "") {
       alert("Please enter a task");
         return;
     }
 
     const li = document.createElement("li");
-    li.textContent = taskTest;
+    li.textContent = taskText;
 
     const removeBtn = document.createElement("button");
     removeBtn.textContent = "Remove";
