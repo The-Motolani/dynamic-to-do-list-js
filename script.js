@@ -1,9 +1,16 @@
 document.addEventListener("DOMContentLoaded", (event) => {
-const addButton = document.getElementById("add-task-btn");
+
+    const addButton = document.getElementById("add-task-btn");
 const taskInput = document.getElementById("task-input");
 const taskList = document.getElementById("task-list");
 
-function addTask(){
+ function loadTasks() {
+        const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        storedTasks.forEach(taskText => addTask(taskText, false)); 
+        // 'false' prevents saving again
+    }
+
+function addTask(taskText = taskInput.value.trim(), save = true){
     taskText = taskInput.value.trim();
     
     if (taskText === "") {
@@ -20,12 +27,24 @@ function addTask(){
 
     removeBtn.onclick =() => {
         taskList.removeChild(li);
+
+        const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            const updatedTasks = storedTasks.filter(task => task !== taskText);
+            localStorage.setItem('tasks', JSON.stringify(updatedTasks));
     };
     
     li.appendChild(removeBtn);
     taskList.appendChild(li);
 
-    taskInput.value = "";
+
+        if (save) {
+            const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+            storedTasks.push(taskText);
+            localStorage.setItem('tasks', JSON.stringify(storedTasks));
+        }
+
+
+   if (save) taskInput.value = "";
 
 }
     addButton.addEventListener("click", addTask);
@@ -34,6 +53,6 @@ function addTask(){
         if (event.key === "Enter") {
             addTask();
         }
-    })
-
+    });
+    loadTasks();
 });
